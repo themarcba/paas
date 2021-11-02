@@ -1,11 +1,16 @@
 <script setup>
+
 import { ref, onMounted } from 'vue'
+import { useClipboard } from '@vueuse/core'
 import { generateHsl } from '../helpers/color'
 const color = ref('')
+
+const { copy, copied, isSupported } = useClipboard({ color })
 
 const setHsl = () => {
   color.value = generateHsl()
   document.body.style.setProperty(`--primary-color`, color.value)
+  if (isSupported) copy(color.value)
 }
 
 onMounted(() => {
@@ -16,18 +21,18 @@ onMounted(() => {
 <template>
   <div class="color-generator" @click="setHsl">
     <div v-if="color" class="color">{{ color }}</div>
-    <div class="instructions">(Click to generate)</div>
+    <div v-if="copied" class="instructions clipboard">(Copied to clipboard)</div>
+    <div v-else class="instructions generate">(Click to generate)</div>
   </div>
 </template>
 
 <style>
 .color-generator {
-  height: 100vh;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-family: monospace;
   color: #fff;
   padding: 1rem;
   text-align: center;
