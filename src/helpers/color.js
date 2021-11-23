@@ -1,4 +1,4 @@
-const purple = { min: 265, max: 275 }
+const purple = { min: 65, max: 75 }
 
 export const randomBetween = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min)
